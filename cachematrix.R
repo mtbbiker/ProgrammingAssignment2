@@ -39,14 +39,16 @@ cacheSolve <- function(x, ...) {
   m <- x$get()
   if(!is.null(m)) {
     message("Getting cached data")
+    #matequal <- function(a,b) is.matrix(a) && is.matrix(b) && dim(a) == dim(b) && all(a==b)
     return(m)
   }
-  data <- x$get()
-  #str(data)
+  
   print("Do expensive calculation an add cache")
-  #m <- mean(data, ...)
-  #x$setmean(m)
-  #str(m)
+  m <- x
+  
+  x$set(m)
+  
+  
   m
 }
 
