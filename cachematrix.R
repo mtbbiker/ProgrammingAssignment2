@@ -1,54 +1,73 @@
 makeCacheMatrix <- function(x = matrix()) {
   ## Resets the matrix
-  m <- NULL ##Place holder for future value (matrix )
+  mat <- x
   invm <-NULL ##Place holder for inverse of m
   
   set <- function(y) {
+    #print("set x:") 
     ##Set the matrix (x) to a new matrix (y)
-    x <<- y
-    m <<- NULL
+    #Compare existing x with new y, if the same then inverse will be already set and used as such
+    #If not same then we have to recalculate the inverse
+    if(!matequal(mat,y))
+    {
+      #print("FALSE")
+      invm <<- NULL 
+    }
+    
+    mat <<- y
   }
+  
+  #Function that will test if 2 matrices are equal
+  matequal <- function(a,b) {is.matrix(a) && is.matrix(b) && dim(a) == dim(b) && all(a==b)}
+  
   get <- function() {
-    x
+    #print("get x:") 
+    
+    mat
+    
   }
+  
+  
   ## Function that will set the inverse, only if the matrix has changed
-  setinverse <- function(matrix) {
-    m <<- matrix
+  setinverse <- function(inverse) {
+    
+    invm <<- inverse
   }
   ##Function that will get the inverse
   getinverse <- function() {
-    m
+    
+    invm
   }
+  
   list(set = set, get = get,
        setinverse = setinverse,
        getinverse = getinverse
   )
-  
 }
 
-
-## Computes the inverse of a Matrix (from makeCacheMatric)
-## Check if the matrix has changed and if an inverse has been calculated
-## If changed, then calculate the inverse and cache the result
-## If the matrix is still the same, retrieve inverse from Cache
 cacheSolve <- function(x, ...) {
-  #Get the matrix
-  #If matrix is same, then get the cached inverse
-  #else recalculte the Inverse and then also cache both the new matrix
-  # and the newly calculated inverse
-  m <- x$get()
-  if(!is.null(m)) {
+  #Calculate the Inverse.
+  #The x#set(b) function need to be used to set the matrix
+  #Example to use Function.
+  # 1. Setup the first matrix (Only NON singular) to calculate: mymatrix <- matrix(c(1:16),2,2)
+  # 2. Setup the Function to do the Matrix caching: cm <- makeCacheMatrix(mymatrix)
+  # 3. Solve the Inverse (and cache if not exist): cacheSolve(cm)
+  # 4. If other matrix are to be calculate, use set() function: cm$(newmatrix)
+  
+  ivm <- x$getinverse()
+  if(!is.null(ivm)) {
     message("Getting cached data")
-    #matequal <- function(a,b) is.matrix(a) && is.matrix(b) && dim(a) == dim(b) && all(a==b)
-    return(m)
+    
+    return(ivm)
   }
   
   print("Do expensive calculation an add cache")
-  m <- x
+  ma <- (x$get())
+  #Also set the matrix
+  mat <-ma
+  ivm <- solve(ma)
+  #m <- data
+  x$setinverse(ivm)
   
-  x$set(m)
-  
-  
-  m
+  ivm
 }
-
