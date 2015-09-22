@@ -56,8 +56,15 @@ cacheSolve <- function(x, ...) {
   
   ma <- (x$get())
   mat <-ma
-  ivm <- solve(ma)
-  x$setinverse(ivm)
+
+  dd <- det(ma)
+  dd
+  if(dd!=0)#Test the determinant
+  {
+    ivm <- solve(ma)
+    x$setinverse(ivm)
+  }
+  
   #return the calculted Inverse
   ivm
 }
