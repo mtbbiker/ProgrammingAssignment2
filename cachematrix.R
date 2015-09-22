@@ -1,19 +1,16 @@
 makeCacheMatrix <- function(x = matrix()) {
-  ## Resets the matrix
+  ## Sets the matrix, required to have an initial matrix for calculation
   mat <- x
   invm <-NULL ##Place holder for inverse of m
   
   set <- function(y) {
-    #print("set x:") 
     ##Set the matrix (x) to a new matrix (y)
     #Compare existing x with new y, if the same then inverse will be already set and used as such
     #If not same then we have to recalculate the inverse
     if(!matequal(mat,y))
     {
-      #print("FALSE")
       invm <<- NULL 
     }
-    
     mat <<- y
   }
   
@@ -21,10 +18,7 @@ makeCacheMatrix <- function(x = matrix()) {
   matequal <- function(a,b) {is.matrix(a) && is.matrix(b) && dim(a) == dim(b) && all(a==b)}
   
   get <- function() {
-    #print("get x:") 
-    
     mat
-    
   }
   
   
@@ -47,12 +41,11 @@ makeCacheMatrix <- function(x = matrix()) {
 
 cacheSolve <- function(x, ...) {
   #Calculate the Inverse.
-  #The x#set(b) function need to be used to set the matrix
   #Example to use Function.
   # 1. Setup the first matrix (Only NON singular) to calculate: mymatrix <- matrix(c(1:16),2,2)
   # 2. Setup the Function to do the Matrix caching: cm <- makeCacheMatrix(mymatrix)
   # 3. Solve the Inverse (and cache if not exist): cacheSolve(cm)
-  # 4. If other matrix are to be calculate, use set() function: cm$(newmatrix)
+  # 4. If other matrix are to be calculated, use set() function: cm$(newmatrix)
   
   ivm <- x$getinverse()
   if(!is.null(ivm)) {
@@ -61,13 +54,10 @@ cacheSolve <- function(x, ...) {
     return(ivm)
   }
   
-  print("Do expensive calculation an add cache")
   ma <- (x$get())
-  #Also set the matrix
   mat <-ma
   ivm <- solve(ma)
-  #m <- data
   x$setinverse(ivm)
-  
+  #return the calculted Inverse
   ivm
 }
